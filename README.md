@@ -60,6 +60,8 @@ Explanation: 本 is not the correct classifier for 猫; use 只 instead
 
 ---
 
+
+
 ### Input
 ```
 
@@ -70,8 +72,29 @@ Explanation: 本 is not the correct classifier for 猫; use 只 instead
 ### Output
 ```
 
-三猫 ❌
-三[只]猫 ✅
+{
+  "original_sentence": "两本猫",
+  "corrected_sentence": "两只猫",
+  "total_errors": 1,
+  "errors": [
+    {
+      "position": 0,
+      "span": {
+        "start": 0,
+        "end": 3
+      },
+      "wrong": "两本猫",
+      "correct": "两只猫",
+      "type": "wrong_classifier",
+      "explanation": "本 is not the correct classifier for 猫; use 只 instead",
+      "number": "两",
+      "classifier": "只"
+    }
+  ],
+  "stats": {
+    "wrong_classifier": 1
+  }
+}
 
 Type: Missing classifier
 Explanation: 猫 requires a classifier after the number
