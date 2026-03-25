@@ -11,6 +11,10 @@ It focuses on three main types of mistakes:
 - confusing 二 (èr) and 两 (liǎng)
 
 ---
+## ▶️ How to Run
+
+```bash
+python marcel.py
 
 ## 🚀 Features
 
