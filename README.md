@@ -119,7 +119,7 @@ Explanation: 猫 requires a classifier after the number
 Type: Liang vs er
 Explanation: Use 两 instead of 二 with classifiers
 
-````
+```
 
 ---
 
@@ -129,13 +129,22 @@ Marcel produces structured output like:
 
 ```json
 {
-  "original_sentence": "...",
-  "corrected_sentence": "...",
+  "original_sentence": "三猫",
+  "corrected_sentence": "三只猫",
   "total_errors": 1,
-  "errors": [...],
-  "stats": {...}
+  "errors": [
+    {
+      "type": "missing_classifier",
+      "wrong": "三猫",
+      "correct": "三只猫",
+      "explanation": "猫 requires a classifier after a number"
+    }
+  ],
+  "stats": {
+    "missing_classifier": 1
+  }
 }
-````
+```
 
 ---
 
