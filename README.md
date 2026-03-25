@@ -14,6 +14,7 @@ It focuses on three main types of mistakes:
 
 ``` bash
 python marcel.py
+```
 
 ## 🚀 Features
 
