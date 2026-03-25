@@ -16,6 +16,12 @@ It focuses on three main types of mistakes:
 ```bash
 python marcel.py
 
+Then enter a Chinese sentence:
+
+两本猫
+
+Marcel will return corrections and feedback.
+
 ## 🚀 Features
 
 - Detects incorrect classifiers (e.g. 两本猫 → 两只猫)
