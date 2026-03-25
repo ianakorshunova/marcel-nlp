@@ -10,17 +10,10 @@ It focuses on three main types of mistakes:
 - missing a classifier
 - confusing 二 (èr) and 两 (liǎng)
 
----
 ## ▶️ How to Run
 
-```bash
+``` bash
 python marcel.py
-
-Then enter a Chinese sentence:
-
-两本猫
-
-Marcel will return corrections and feedback.
 
 ## 🚀 Features
 
