@@ -71,11 +71,11 @@ def check_liang_vs_er(sentence, errors):
               wrong_patterns.append(f"二{clf}{adj}{noun}")
               wrong_patterns.append(f"二{clf}{adj}的{noun}")
 
-          for wrong in wrong_patterns:
+          for wrong in wrong_patterns: # check all possible wrong patterns
               while wrong in sentence:
                   position = sentence.find(wrong)
                   correct = "两" + wrong[1:] # replace 二 → 两
-                  explanation = "Use 两 instead of 二 with classifiers"
+                  explanation = "Use 两 instead of 二 before classifiers"
 
                   errors.append((position, wrong, correct, explanation, "liang_vs_er", None, None))
                   sentence = sentence.replace(wrong, correct, 1)
@@ -92,9 +92,7 @@ def check_classifiers_in_string(sentence):
     sentence, errors = check_liang_vs_er(sentence, errors)
 
     for number in NUMBERS:
-      for noun in CLASSIFIERS:
-        classifier = CLASSIFIERS[noun]
-
+      for noun, classifier in CLASSIFIERS.items()
         wrong_pattern = number + noun
         correct_pattern = number + classifier + noun
 
@@ -120,7 +118,7 @@ def check_classifiers_in_string(sentence):
 
           while wrong_pattern_4 in sentence:
             position = sentence.find(wrong_pattern_4)
-            # Missing classifier with adjective: 三漂亮猫 → 三只漂亮猫
+            # Missing classifier with adjective + 的: 三漂亮的猫 → 三只漂亮的猫
             explanation = f"Missing classifier: {noun} requires {classifier} after the number"
             errors.append((position, wrong_pattern_4, correct_pattern_4, explanation, "missing_classifier", number, classifier))
             sentence = sentence.replace(wrong_pattern_4, correct_pattern_4, 1)
