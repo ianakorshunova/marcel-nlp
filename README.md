@@ -1,6 +1,4 @@
 # Marcel NLP
-A rule-based NLP tool for detecting, correcting, and explaining mistakes in Chinese classifiers.
-
 ---
 ## 📌 Overview
 Marcel is a lightweight educational NLP system designed to help learners of Chinese identify and fix common classifier-related errors.
@@ -9,6 +7,18 @@ It focuses on three main types of mistakes:
 - using the wrong classifier
 - missing a classifier
 - confusing 二 (èr) and 两 (liǎng)
+---
+
+## 💡 Why this project?
+
+Chinese classifiers are one of the most challenging aspects for learners.
+This tool helps bridge the gap between memorization and real usage by providing
+automatic correction and explanations.
+
+It is especially useful for:
+- beginner and intermediate learners
+- educational tools
+- NLP experimentation with rule-based systems
 
 ## ▶️ How to Run
 
@@ -148,19 +158,27 @@ Marcel produces structured output like:
 
 ---
 
+## 🧠 Design Decisions
+
+- Chose a rule-based approach for transparency and explainability
+- Focused on common learner mistakes rather than full language coverage
+- Prioritized readability of output for educational use
+
 ## 🔮 Future Improvements
 
-* Support for more nouns and classifiers
-* Batch sentence processing
-* Integration into a chatbot or web app
-* More advanced linguistic rules
+- Expand classifier dictionary
+- Support multi-sentence input
+- Integrate with a chatbot (e.g. Telegram)
+- Add web interface
+- Explore hybrid rule-based + ML approach
 
 ---
 
 ## 🛠 Tech Stack
 
-* Python
-* Rule-based NLP
+- Python 3
+- Rule-based Natural Language Processing (NLP)
+- Pattern matching & string processing
 
 ```
 
