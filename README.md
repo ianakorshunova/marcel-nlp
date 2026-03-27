@@ -167,5 +167,3 @@ Marcel produces structured output like:
 
 ```
 
----
-
