@@ -286,7 +286,7 @@ def check_classifiers_in_string(sentence):
       print(json.dumps(result, ensure_ascii=False, indent=2))
       print("\n=== HUMAN READABLE OUTPUT ===")
 
-      errors, corrected = check_classifiers_in_string(sentence)
+      errors, corrected_sentence = check_classifiers_in_string(corrected_sentence)
 
       print("Errors found:")
       print("-" * 30)
