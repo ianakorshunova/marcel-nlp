@@ -64,9 +64,6 @@ Explanation: 本 is not the correct classifier for 猫; use 只 instead
 
 ```
 
----
-
-
 
 ### Input
 ```
@@ -107,8 +104,6 @@ Explanation: 猫 requires a classifier after the number
 
 ```
 
----
-
 ### Input
 ```
 
@@ -126,8 +121,6 @@ Type: Liang vs er
 Explanation: Use 两 instead of 二 with classifiers
 
 ```
-
----
 
 ## 📊 Output Format
 
@@ -152,8 +145,6 @@ Marcel produces structured output like:
 }
 ```
 
----
-
 ## 🧠 Design Decisions
 
 - Chose a rule-based approach for transparency and explainability
@@ -167,8 +158,6 @@ Marcel produces structured output like:
 - Integrate with a chatbot (e.g. Telegram)
 - Add web interface
 - Explore hybrid rule-based + ML approach
-
----
 
 ## 🛠 Tech Stack
 
