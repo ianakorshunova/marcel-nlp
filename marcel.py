@@ -138,14 +138,14 @@ def check_classifiers_in_string(sentence):
     return errors, sentence
 
 # Helper for learner feedback text
-  def pluralize_time(count):
+def pluralize_time(count):
     if count == 1:
       return "time"
     else:
       return "times"
 
   # Human-readable feedback for the learner
-  def generate_feedback(errors):
+def generate_feedback(errors):
       stats = {}
 
       for _, _, _, _, error_type, _, _ in errors:
@@ -180,7 +180,7 @@ def check_classifiers_in_string(sentence):
 
   # Helper functions
 
-  def highlight_error(sentence, position, wrong, correct, error_type, number=None, classifier=None):
+def highlight_error(sentence, position, wrong, correct, error_type, number=None, classifier=None):
       if error_type == "wrong_classifier" and number and classifier:
           before = sentence[:position + len(number)]
           after = sentence[position + len(number) + 1:]
@@ -215,7 +215,7 @@ def check_classifiers_in_string(sentence):
           return wrong_h, correct_h
 
   # Structured output for portfolio / future app integration
-  def analyze_sentence(sentence):
+def analyze_sentence(sentence):
       errors, corrected_sentence = check_classifiers_in_string(sentence)
 
       stats = {}
@@ -248,7 +248,7 @@ def check_classifiers_in_string(sentence):
 
   # Console display helper:
   # Prints the sentence and highlights the error position
-  def print_with_pointer(sentence, position, wrong, error_type, number=None, classifier=None):
+def print_with_pointer(sentence, position, wrong, error_type, number=None, classifier=None):
     if error_type == "missing_classifier" and number:
       pointer_position = position + len(number)
       pointer = " " * pointer_position + "^"
@@ -277,7 +277,7 @@ def check_classifiers_in_string(sentence):
       print(sentence)
       print(pointer)
 
-  if __name__ == "__main__":
+if __name__ == "__main__":
       sentence = "三猫和二本狗"
 
       result = analyze_sentence(sentence)
