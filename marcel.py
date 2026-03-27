@@ -92,7 +92,7 @@ def check_classifiers_in_string(sentence):
     sentence, errors = check_liang_vs_er(sentence, errors)
 
     for number in NUMBERS:
-      for noun, classifier in CLASSIFIERS.items()
+      for noun, classifier in CLASSIFIERS.items():
         wrong_pattern = number + noun
         correct_pattern = number + classifier + noun
 
