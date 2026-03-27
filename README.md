@@ -164,6 +164,3 @@ Marcel produces structured output like:
 - Python 3
 - Rule-based Natural Language Processing (NLP)
 - Pattern matching & string processing
-
-```
-
