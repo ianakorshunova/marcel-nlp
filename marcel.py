@@ -169,10 +169,6 @@ def check_classifiers_in_string(sentence):
 
       print("\n💡 Advice:")
 
-      if not errors:
-        print("- Keep going, your Chinese is solid here!")
-        return
-
       if "liang_vs_er" in stats:
           print("- Remember: 两 is used before classifiers, not 二")
 
@@ -182,7 +178,7 @@ def check_classifiers_in_string(sentence):
       if "wrong_classifier" in stats:
           print("- Remember: each noun has its own classifier")
 
-  # --- helpers ---
+  # Helper functions
 
   def highlight_error(sentence, position, wrong, correct, error_type, number=None, classifier=None):
       if error_type == "wrong_classifier" and number and classifier:
@@ -220,7 +216,7 @@ def check_classifiers_in_string(sentence):
 
   # Structured output for portfolio / future app integration
   def analyze_sentence(sentence):
-      errors, corrected = check_classifiers_in_string(sentence)
+      errors, corrected_sentence = check_classifiers_in_string(sentence)
 
       stats = {}
       for _, _, _, _, error_type, _, _ in errors:
@@ -244,14 +240,14 @@ def check_classifiers_in_string(sentence):
 
       return {
           "original_sentence": sentence,
-          "corrected_sentence": corrected,
+          "corrected_sentence": corrected_sentence,
           "total_errors": len(errors),
           "errors": error_list,
           "stats": stats
       }
 
   # Console display helper:
-  # prints the sentence and points to the error location
+  # Prints the sentence and highlights the error position
   def print_with_pointer(sentence, position, wrong, error_type, number=None, classifier=None):
     if error_type == "missing_classifier" and number:
       pointer_position = position + len(number)
@@ -265,7 +261,7 @@ def check_classifiers_in_string(sentence):
 
     elif error_type == "wrong_classifier" and number:
       pointer_position = position + len(number)
-      pointer = " " * pointer_position + "^" * len(wrong)
+      pointer = " " * pointer_position + "^^"
 
       print(sentence)
       print(pointer)
