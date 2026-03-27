@@ -1,3 +1,4 @@
+"""
 Marcel — a rule-based Chinese grammar checker.
     
 Detects and corrects classifier errors in learner-generated Chinese sentences.
