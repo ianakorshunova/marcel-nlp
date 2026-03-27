@@ -1,5 +1,5 @@
 # Marcel NLP
----
+
 ## 📌 Overview
 Marcel is a lightweight educational NLP system designed to help learners of Chinese identify and fix common classifier-related errors.
 
@@ -7,7 +7,6 @@ It focuses on three main types of mistakes:
 - using the wrong classifier
 - missing a classifier
 - confusing 二 (èr) and 两 (liǎng)
----
 
 ## 💡 Why this project?
 
@@ -36,8 +35,6 @@ python marcel.py
   - structured data (JSON-like)
   - human-readable feedback for learners
 
----
-
 ## 🧠 Approach
 
 This project uses a **rule-based NLP approach**, including:
@@ -46,7 +43,6 @@ This project uses a **rule-based NLP approach**, including:
 - iterative string correction
 - simple linguistic rules for Chinese grammar
 
----
 
 ## 🧪 Example
 
