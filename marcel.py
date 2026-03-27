@@ -306,5 +306,5 @@ if __name__ == "__main__":
         print()
 
       print("\nCorrected sentence:")
-      print(corrected)
+      print(corrected_sentence)
       generate_feedback(errors)
