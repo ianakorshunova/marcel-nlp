@@ -286,7 +286,7 @@ if __name__ == "__main__":
       print(json.dumps(result, ensure_ascii=False, indent=2))
       print("\n=== HUMAN READABLE OUTPUT ===")
 
-      errors, corrected_sentence = check_classifiers_in_string(corrected_sentence)
+      errors, corrected_sentence = check_classifiers_in_string(sentence)
 
       print("Errors found:")
       print("-" * 30)
