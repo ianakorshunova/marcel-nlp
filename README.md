@@ -4,6 +4,10 @@ Marcel is a lightweight educational NLP tool for detecting and correcting common
 
 It is designed as a small rule-based prototype for Chinese language learning, educational technology, and transparent NLP experimentation.
 
+## 🌐 Live Demo
+
+Try the app here: [Marcel NLP](https://marcel-classifier-checker.streamlit.app/)
+
 ## 📌 Overview
 
 Marcel focuses on three common types of classifier-related learner errors:
@@ -291,7 +295,7 @@ Current limitations:
 * Support multi-sentence input
 * Improve handling of longer sentences
 * Add pinyin and example sentences
-* Deploy the Streamlit app online
+* Improve the Streamlit interface
 * Explore a hybrid rule-based + ML approach
 
 ## 📌 Status
