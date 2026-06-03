@@ -135,6 +135,9 @@ def check_classifiers_in_string(sentence):
               explanation = f"{wrong_cl} is not the correct classifier for {noun}; use {correct_cl} instead"
               errors.append((position, wrong_pattern_3, correct_pattern_3, explanation, "wrong_classifier", number, correct_cl))
               sentence = sentence.replace(wrong_pattern_3, correct_pattern_3, 1)
+    # Run 二 → 两 correction again after classifier fixes.
+    # This catches combined mistakes like 二狗 → 二只狗 → 两只狗.
+    sentence, errors = check_liang_vs_er(sentence, errors)
     return errors, sentence
 
 # Helper for learner feedback text

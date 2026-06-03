@@ -54,3 +54,11 @@ def test_correct_sentence_has_no_errors():
     assert result["corrected_sentence"] == "三只猫"
     assert result["total_errors"] == 0
     assert result["errors"] == []
+    
+def test_missing_classifier_with_er_becomes_liang():
+    result = analyze_sentence("二狗")
+
+    assert result["corrected_sentence"] == "两只狗"
+    assert result["total_errors"] == 2
+    assert result["errors"][0]["type"] == "missing_classifier"
+    assert result["errors"][1]["type"] == "liang_vs_er"
