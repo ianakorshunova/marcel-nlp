@@ -8,6 +8,10 @@ It is designed as a small rule-based prototype for Chinese language learning, ed
 
 Try the app here: [Marcel NLP](https://marcel-classifier-checker.streamlit.app/)
 
+## 📸 Screenshot
+
+![Marcel demo](assets/marcel-demo.png)
+
 ## 📌 Overview
 
 Marcel focuses on three common types of classifier-related learner errors:
