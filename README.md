@@ -10,7 +10,7 @@ Try the app here: [Marcel NLP](https://marcel-classifier-checker.streamlit.app/)
 
 ## 📸 Screenshot
 
-![Marcel demo](assets/marcel-demo.png)
+<img src="assets/marcel-demo.png" alt="Marcel demo" width="900">
 
 ## 📌 Overview
 
