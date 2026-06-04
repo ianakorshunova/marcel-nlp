@@ -32,6 +32,11 @@ with st.sidebar:
     st.markdown("### Tech")
     st.caption("Python · Streamlit · pytest · Rule-based NLP")
 
+    st.markdown("### Note")
+    st.caption(
+        "Marcel is a prototype and does not cover full Chinese grammar."
+    )
+
 
 st.title("Marcel 🐈")
 st.markdown("## Chinese Classifier Error Checker")
@@ -71,14 +76,16 @@ if sentence:
     with col2:
         st.markdown("**Corrected**")
         st.success(result["corrected_sentence"])
-
-    st.markdown("### Summary")
-
+    
+    st.markdown("### Analysis summary")
+    
+    st.metric("Total errors", result["total_errors"])
+    
     if result["total_errors"] == 0:
-        st.success("No classifier errors found.")
+        st.success(
+        "No classifier errors found. The sentence looks correct within Marcel's current rule set."
+        )
     else:
-        st.write(f"Total errors: **{result['total_errors']}**")
-
         st.markdown("### Detected errors")
 
         for index, error in enumerate(result["errors"], start=1):
