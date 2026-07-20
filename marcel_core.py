@@ -36,21 +36,112 @@ Provides structured JSON output and human-readable feedback.
 import json
 
 # Core data: noun → correct classifier
+
 CLASSIFIERS = {
-      "猫": "只",
-      "狗": "只",
-      "书": "本",
-      "人": "个",
-      "学生": "个",
-      "车": "辆",
-      "衣服": "件",
-      "桌子": "张",
-      "椅子": "把"
+    "猫": ["只"],
+    "狗": ["只"],
+    "鸟": ["只"],
+    "兔子": ["只"],
+
+    "书": ["本", "部"],
+    "杂志": ["本", "份"],
+    "词典": ["本", "部"],
+
+    "人": ["个", "位", "名"],
+    "学生": ["个", "名", "位"],
+    "朋友": ["个", "位"],
+    "孩子": ["个", "名"],
+
+    "老师": ["位", "名", "个"],
+    "医生": ["位", "名", "个"],
+    "客人": ["位", "名", "个"],
+
+    "车": ["辆", "部"],
+    "自行车": ["辆"],
+    "摩托车": ["辆", "部"],
+
+    "衣服": ["件", "套"],
+    "衬衫": ["件"],
+    "外套": ["件"],
+
+    "桌子": ["张"],
+    "床": ["张"],
+    "纸": ["张", "片"],
+    "票": ["张", "枚"],
+
+    "椅子": ["把"],
+    "伞": ["把"],
+    "刀": ["把"],
+    "钥匙": ["把", "串"],
+
+    "房间": ["间"],
+    "教室": ["间"],
+    "办公室": ["间"],
+
+    "学校": ["所", "座"],
+    "医院": ["所", "家"],
+
+    "楼": ["栋", "座"],
+    "房子": ["栋", "间", "套"],
+
+    "山": ["座"],
+    "桥": ["座"],
+
+    "电脑": ["台", "部"],
+    "电视": ["台"],
+    "手机": ["部", "台"],
+    "电影": ["部", "场"],
+
+    "花": ["朵", "束", "枝"],
+    "树": ["棵", "排", "片"],
+    "照片": ["张", "组"],
+    "信": ["封"],
+    "文章": ["篇", "份"],
+    "歌": ["首", "支"],
 }
 
-ADJECTIVES = ["大", "小", "新", "旧", "漂亮", "可爱"]
+ALL_CLASSIFIERS = {
+    classifier
+    for classifiers in CLASSIFIERS.values()
+    for classifier in classifiers
+}
+
+ADJECTIVES = [
+    "大",
+    "小",
+    "新",
+    "旧",
+    "漂亮",
+    "可爱",
+    "好看",
+    "年轻",
+    "年老",
+    "高",
+    "矮",
+    "长",
+    "短",
+    "红",
+    "白",
+    "黑",
+    "贵",
+    "便宜",
+    "重要",
+    "有趣",
+    "特别",
+]
 
 NUMBERS = ["一","二","三","四","五","六","七","八","九","十","两"]
+
+COMPOUND_NUMBERS = [
+    "十一",
+    "十二",
+    "二十",
+    "二十一",
+    "二十二",
+    "三十",
+    "一百",
+    "二百",
+]
 
 # Rule 1: fix 二 → 两 before classifiers
 def check_liang_vs_er(sentence, errors):
@@ -60,84 +151,236 @@ def check_liang_vs_er(sentence, errors):
       二只可爱的猫 -> 两只可爱的猫
       二个位老师 -> 两位老师   (if 位 is in your classifier data later)
       """
-      for noun, clf in CLASSIFIERS.items():
-          wrong_patterns = [
-              f"二{clf}{noun}",
-              f"二{clf}的{noun}",
-          ]
+      for noun, classifiers in CLASSIFIERS.items():
+        for clf in classifiers:
+            wrong_patterns = [
+                f"二{clf}{noun}",
+                f"二{clf}的{noun}",
+            ]
+
+            for adj in ADJECTIVES:
+                wrong_patterns.append(f"二{clf}{adj}{noun}")
+                wrong_patterns.append(f"二{clf}{adj}的{noun}")
+            
+        # дальше остаётся нынешняя проверка wrong_patterns
 
           # adjective structure: 二只可爱的猫 / 二只漂亮猫
-          for adj in ADJECTIVES:
-              wrong_patterns.append(f"二{clf}{adj}{noun}")
-              wrong_patterns.append(f"二{clf}{adj}的{noun}")
 
-          for wrong in wrong_patterns: # check all possible wrong patterns
-              while wrong in sentence:
-                  position = sentence.find(wrong)
-                  correct = "两" + wrong[1:] # replace 二 → 两
+            for wrong in wrong_patterns:  # check all possible wrong patterns
+              search_start = 0
+
+              while True:
+                  position = sentence.find(wrong, search_start)
+
+                  if position == -1:
+                      break
+
+                  chinese_number_chars = "零〇一二三四五六七八九十百千万亿两"
+                  blocked_previous_chars = chinese_number_chars + "第"
+
+                  previous_char = sentence[position - 1] if position > 0 else ""
+
+                  # Do not replace 二 when it is:
+                  # 1. part of a compound number: 十二本书, 二十二本书
+                  # 2. part of an ordinal number: 第二本书
+
+                  if previous_char and previous_char in blocked_previous_chars:
+                    search_start = position + 1
+                    continue
+
+                  correct = "两" + wrong[1:]  # replace 二 → 两
                   explanation = "Use 两 instead of 二 before classifiers"
 
-                  errors.append((position, wrong, correct, explanation, "liang_vs_er", None, None))
-                  sentence = sentence.replace(wrong, correct, 1)
+                  errors.append(
+                      (
+                          position,
+                          wrong,
+                          correct,
+                          explanation,
+                          "liang_vs_er",
+                          None,
+                          None,
+                      )
+                  )
+
+                  sentence = (
+                      sentence[:position]
+                      + correct
+                      + sentence[position + len(wrong):]
+                  )
+
+                  search_start = position + len(correct)
+                  
       return sentence, errors
 
   # Core rule-based checker:
   # detects missing classifiers and wrong classifiers
 def check_classifiers_in_string(sentence):
-
-    # remove spaces for pattern matching
+    # Remove spaces for pattern matching
     sentence = sentence.replace(" ", "")
     errors = []
 
     sentence, errors = check_liang_vs_er(sentence, errors)
 
     for number in NUMBERS:
-      for noun, classifier in CLASSIFIERS.items():
-        wrong_pattern = number + noun
-        correct_pattern = number + classifier + noun
+        correct_number = "两" if number == "二" else number
 
-        while wrong_pattern in sentence:
-          position = sentence.find(wrong_pattern)
-          # Missing classifier: 三猫 → 三只猫
-          explanation = f"Missing classifier: {noun} requires {classifier} after the number"
-          errors.append((position, wrong_pattern, correct_pattern, explanation, "missing_classifier", number, classifier))
-          sentence = sentence.replace(wrong_pattern, correct_pattern, 1)
+        # Check missing classifiers
+        for noun, classifiers in CLASSIFIERS.items():
+            preferred_classifier = classifiers[0]
 
-        for adj in ADJECTIVES:
-          wrong_pattern_2 = number + adj + noun
-          correct_pattern_2 = number + classifier + adj + noun
+            wrong_pattern = number + noun
+            correct_pattern = correct_number + preferred_classifier + noun
 
-          while wrong_pattern_2 in sentence:
-            position = sentence.find(wrong_pattern_2)
-            explanation = f"Missing classifier: {noun} requires {classifier} after the number"
-            errors.append((position, wrong_pattern_2, correct_pattern_2, explanation, "missing_classifier", number, classifier))
-            sentence = sentence.replace(wrong_pattern_2, correct_pattern_2, 1)
+            while wrong_pattern in sentence:
+                position = sentence.find(wrong_pattern)
 
-          wrong_pattern_4 = number + adj + "的" + noun
-          correct_pattern_4 = number + classifier + adj + "的" + noun
+                explanation = (
+                    f"Missing classifier: {noun} requires "
+                    f"{preferred_classifier} after the number"
+                )
 
-          while wrong_pattern_4 in sentence:
-            position = sentence.find(wrong_pattern_4)
-            # Missing classifier with adjective + 的: 三漂亮的猫 → 三只漂亮的猫
-            explanation = f"Missing classifier: {noun} requires {classifier} after the number"
-            errors.append((position, wrong_pattern_4, correct_pattern_4, explanation, "missing_classifier", number, classifier))
-            sentence = sentence.replace(wrong_pattern_4, correct_pattern_4, 1)
+                errors.append(
+                    (
+                        position,
+                        wrong_pattern,
+                        correct_pattern,
+                        explanation,
+                        "missing_classifier",
+                        number,
+                        preferred_classifier,
+                    )
+                )
 
-      for noun, correct_cl in CLASSIFIERS.items():
-        for wrong_cl in CLASSIFIERS.values():
-          if wrong_cl != correct_cl:
-            wrong_pattern_3 = number + wrong_cl + noun
-            correct_pattern_3 = number + correct_cl + noun
+                sentence = sentence.replace(
+                    wrong_pattern,
+                    correct_pattern,
+                    1,
+                )
 
-            while wrong_pattern_3 in sentence:
-              position = sentence.find(wrong_pattern_3)
-              # Wrong classifier: 两本猫 → 两只猫
-              explanation = f"{wrong_cl} is not the correct classifier for {noun}; use {correct_cl} instead"
-              errors.append((position, wrong_pattern_3, correct_pattern_3, explanation, "wrong_classifier", number, correct_cl))
-              sentence = sentence.replace(wrong_pattern_3, correct_pattern_3, 1)
-    # Run 二 → 两 correction again after classifier fixes.
-    # This catches combined mistakes like 二狗 → 二只狗 → 两只狗.
+            # Missing classifier with adjective
+            for adj in ADJECTIVES:
+                wrong_pattern_2 = number + adj + noun
+                correct_pattern_2 = (
+                    correct_number
+                    + preferred_classifier
+                    + adj
+                    + noun
+                )
+
+                while wrong_pattern_2 in sentence:
+                    position = sentence.find(wrong_pattern_2)
+
+                    explanation = (
+                        f"Missing classifier: {noun} requires "
+                        f"{preferred_classifier} after the number"
+                    )
+
+                    errors.append(
+                        (
+                            position,
+                            wrong_pattern_2,
+                            correct_pattern_2,
+                            explanation,
+                            "missing_classifier",
+                            number,
+                            preferred_classifier,
+                        )
+                    )
+
+                    sentence = sentence.replace(
+                        wrong_pattern_2,
+                        correct_pattern_2,
+                        1,
+                    )
+
+                wrong_pattern_4 = number + adj + "的" + noun
+                correct_pattern_4 = (
+                    correct_number
+                    + preferred_classifier
+                    + adj
+                    + "的"
+                    + noun
+                )
+
+                while wrong_pattern_4 in sentence:
+                    position = sentence.find(wrong_pattern_4)
+
+                    explanation = (
+                        f"Missing classifier: {noun} requires "
+                        f"{preferred_classifier} after the number"
+                    )
+
+                    errors.append(
+                        (
+                            position,
+                            wrong_pattern_4,
+                            correct_pattern_4,
+                            explanation,
+                            "missing_classifier",
+                            number,
+                            preferred_classifier,
+                        )
+                    )
+
+                    sentence = sentence.replace(
+                        wrong_pattern_4,
+                        correct_pattern_4,
+                        1,
+                    )
+
+        # Check wrong classifiers
+        for noun, allowed_classifiers in CLASSIFIERS.items():
+            preferred_classifier = allowed_classifiers[0]
+
+            for wrong_classifier in ALL_CLASSIFIERS:
+                # Do not flag an allowed alternative
+                if wrong_classifier in allowed_classifiers:
+                    continue
+
+                wrong_pattern_3 = (
+                    number
+                    + wrong_classifier
+                    + noun
+                )
+
+                correct_pattern_3 = (
+                    correct_number
+                    + preferred_classifier
+                    + noun
+                )
+
+                while wrong_pattern_3 in sentence:
+                    position = sentence.find(wrong_pattern_3)
+
+                    explanation = (
+                        f"{wrong_classifier} is not a correct "
+                        f"classifier for {noun}; "
+                        f"use {preferred_classifier} instead"
+                    )
+
+                    errors.append(
+                        (
+                            position,
+                            wrong_pattern_3,
+                            correct_pattern_3,
+                            explanation,
+                            "wrong_classifier",
+                            number,
+                            preferred_classifier,
+                        )
+                    )
+
+                    sentence = sentence.replace(
+                        wrong_pattern_3,
+                        correct_pattern_3,
+                        1,
+                    )
+
+    # Run again because another rule may have inserted a classifier:
+    # 二电影 -> 二部电影 -> 两部电影
     sentence, errors = check_liang_vs_er(sentence, errors)
+
     return errors, sentence
 
 # Helper for learner feedback text
